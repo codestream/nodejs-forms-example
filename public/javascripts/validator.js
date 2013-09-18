@@ -1,99 +1,70 @@
 window.onload = function () {
+
     'use strict';
+    var existingEmails = [
+        "test@test.com", "user@qwerty.com", "testuser@test.com", "haiaoah@gmail.com",
+        "asksoi@hotmail.com", "ajioanioa@mail.ru"
+    ];
 
     var formValidator = (function () {
 
-        var existingEmails = [
-            "test@test.com", "user@qwerty.com", "testuser@test.com", "haiaoah@gmail.com",
-            "asksoi@hotmail.com", "ajioanioa@mail.ru"
-        ];
-
-        var passwordInput, emailInput, passwordErrorBlock, emailErrorBlock, strengthMeter;
+        var emailInput, passwordErrorBlock, emailErrorBlock, strengthMeter;
 
         return {
 
             checkPassword: function () {
-                passwordInput = document.getElementById("password");
+                var passwordValue = document.getElementById("password").value;
                 passwordErrorBlock = document.getElementById("password-error");
                 strengthMeter = document.getElementById("strength-meter");
-                var passwordLength = passwordInput.value.length;
-                switch(passwordLength){
-                    case 0:
-                        passwordErrorBlock.style.display = "block";
-                        passwordErrorBlock.style.cssColor = "red";
-                        strengthMeter.style.backgroundColor = "red";
-                        return;
-                    case 1:
-                        strengthMeter.style.display = "block";
-                        passwordErrorBlock.innerHTML = "Your password is too weak";
-                        passwordErrorBlock.style.marginTop = 0.4 + "%";
-                        passwordErrorBlock.style.cssColor = "red";
-                        strengthMeter.style.backgroundColor = "red";
-                        break;
-                    case 2:
-                        strengthMeter.style.display = "block";
-                        if(passwordInput.value.match(/(?=.*[a-z])/i)){
-                            passwordErrorBlock.innerHTML = "Your password now a bit better, try more complex password";
-                            passwordErrorBlock.style.marginTop = 0.4 + "%";
-                            passwordErrorBlock.style.cssColor = "red";
-                            strengthMeter.style.backgroundColor = "red";
-                        }
-                        break;
-                    case 4:
-                        strengthMeter.style.display = "block";
-                        if(passwordInput.value.match(/[^\w\s]/gi)){
-                            strengthMeter.style.backgroundColor = "#b8860b";
-                            passwordErrorBlock.innerHTML = "Your password is strong, but it must be at least 12 characters";
-                            passwordErrorBlock.style.marginTop = 0.4 + "%";
-                            passwordErrorBlock.style.cssColor = "red";
-                            strengthMeter.style.backgroundColor = "red";
-                        }
-                        break;
-                    case 8:
-                        strengthMeter.style.display = "block";
-                        if(passwordInput.value.match(/[^\w\s]/gi)){
-                            strengthMeter.style.backgroundColor = "#b8860b";
-                            passwordErrorBlock.innerHTML = "Your password is strong, but it must be at least 12 characters";
-                            passwordErrorBlock.style.marginTop = 0.4 + "%";
-                            passwordErrorBlock.style.cssColor = "red";
-                            strengthMeter.style.backgroundColor = "red";
-                        }
-                        break;
-                    case 12:
-                        strengthMeter.style.display = "block";
-                        if(passwordInput.value.match(/^(?=.{12,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/)){
-                            strengthMeter.style.backgroundColor = "#008000";
-                            strengthMeter.style.width = passwordInput.style.width;
-                            passwordErrorBlock.innerHTML = "Your password is bulletproof";
-                            passwordErrorBlock.style.marginTop = 0.4 + "%";
-                            passwordErrorBlock.style.cssColor = "#008000";
-                        }
-                        break;
+                strengthMeter.style.display = "none";
+                if (passwordValue.length === 0) {
+                    passwordErrorBlock.style.display = "block";
+                    passwordErrorBlock.style.cssColor = "black";
+                    strengthMeter.style.display = "block";
+                    strengthMeter.style.backgroundColor = "silver";
+                    passwordErrorBlock.innerHTML = "Enter your password at least 12 characters";
+                } else if (passwordValue.length > 0 && passwordValue.length <= 4) {
+                    passwordErrorBlock.style.display = "block";
+                    passwordErrorBlock.style.cssColor = "black";
+                    strengthMeter.style.display = "block";
+                    strengthMeter.style.backgroundColor = "silver";
+                    passwordErrorBlock.innerHTML = "Your password is too weak";
+                } else if (passwordValue.length > 4 && passwordValue.length <= 8) {
+                    passwordErrorBlock.style.display = "block";
+                    passwordErrorBlock.style.cssColor = "black";
+                    strengthMeter.style.display = "block";
+                    strengthMeter.style.backgroundColor = "orange";
+                    passwordErrorBlock.innerHTML = "Your password now is bit stronger";
+                } else if (passwordValue.length > 8 && passwordValue.length < 12) {
+                    passwordErrorBlock.style.display = "block";
+                    passwordErrorBlock.style.cssColor = "black";
+                    strengthMeter.style.display = "block";
+                    strengthMeter.style.backgroundColor = "orange";
+                    passwordErrorBlock.innerHTML = "Your password now is almost bulletproof, try again";
+                } else {
+                    passwordErrorBlock.style.display = "block";
+                    passwordErrorBlock.style.cssColor = "black";
+                    strengthMeter.style.display = "block";
+                    strengthMeter.style.backgroundColor = "green";
+                    passwordErrorBlock.innerHTML = "Your password now is bulletproof";
                 }
             },
 
-            replaceWrongLiterals: function () {
-                passwordInput = document.getElementById("password");
-                passwordInput.value = passwordInput.value.replace(/[а-яА-Я]/g, "");
-
-                return passwordInput;
-            },
-
-            checkEmail: function(){
+            checkEmail: function () {
                 emailInput = document.getElementById("email");
                 emailErrorBlock = document.getElementById("email-error");
-                if(emailInput.value.length > 0
-                    && !emailInput.value.match(/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/)){
-                    emailErrorBlock.innerHTML = "Your email doesn't valid";
+                if (emailInput.value.length > 0
+                    && !emailInput.value.match(/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/)) {
+                    emailErrorBlock.innerHTML = "Your email is not valid";
                     emailErrorBlock.style.cssColor = "red";
                 }
-                if(emailInput.value.match(/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/)){
+                if (emailInput.value.match(/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/)) {
                     emailErrorBlock.innerHTML = "Your email valid";
                     emailErrorBlock.style.cssColor = "green";
                 }
 
-                for(var i = 0; i < existingEmails.length; i++){
-                    if(existingEmails[i] === emailInput.value){
+                for (var i = 0; i < existingEmails.length; i++) {
+                    if (existingEmails[i] === emailInput.value) {
                         emailErrorBlock.innerHTML = "This e-mail has been already in use";
                         emailErrorBlock.style.cssColor = "red";
                     }
@@ -105,28 +76,52 @@ window.onload = function () {
     var passwordInputListener = function () {
         var passwordField = document.getElementById("password");
         if (passwordField.addEventListener) {
-            passwordField.addEventListener('keyup', formValidator.checkPassword, false);
-            passwordField.addEventListener('keyup', formValidator.replaceWrongLiterals, false);
+            passwordField.addEventListener('keydown', formValidator.checkPassword, false);
         } else {
-            passwordField.onkeyup = function () {
+            passwordField.onkeydown = function () {
                 formValidator.checkPassword();
-                formValidator.replaceWrongLiterals();
             }
         }
     };
 
     passwordInputListener();
 
-    var emailInputListener = function(){
+    var emailInputListener = function () {
         var emailField = document.getElementById("email");
-        if(emailField.addEventListener){
-            emailField.addEventListener('keyup', formValidator.checkEmail, false);
+        if (emailField.addEventListener) {
+            emailField.addEventListener('keydown', formValidator.checkEmail, false);
         } else {
-            emailField.onkeyup = function(){
+            emailField.onkeyup = function () {
                 formValidator.checkEmail();
             }
         }
     };
 
     emailInputListener();
+
+    var onsubmitListener = function () {
+        var emailInput = document.getElementById("email");
+        var passwordInput = document.getElementById("password");
+        for (var i = 0; i < existingEmails.length; i++) {
+            if (existingEmails[i] === emailInput.value || passwordInput.value.length === 0) {
+                return false;
+            } else if(existingEmails[i] !== emailInput.value && passwordInput.value.length >= 12){
+                var f = document.forms['submit-form'];
+                HTMLFormElement.prototype.submit.call(f);
+            }
+        }
+    };
+
+    var submitForm = function(){
+        var submitButton = document.getElementById("submit");
+        if(submitButton.addEventListener){
+            submitButton.addEventListener('click', onsubmitListener, false);
+        } else {
+            submitButton.onsubmit = function(){
+                onsubmitListener();
+            }
+        }
+    };
+
+    submitForm();
 };

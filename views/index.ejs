@@ -5,7 +5,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-  <form id="submit-form" action="/home" method="post">
+  <form id="submit-form" action="/home" name="submit-form" method="post">
   <div class="container">
           <div class="control">
             <p>Password <input type="password" id="password" name="password"/></p>
@@ -17,7 +17,7 @@
             <p class="error-block" id="email-error">E-mail field can't be empty</p>
           </div>
           <div class="control">
-            <input id="submit" type="submit" role="button"/>
+            <button id="submit" type="button" role="button">Submit</button>
           </div>
       </div>
   </form>
